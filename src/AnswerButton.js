@@ -5,7 +5,7 @@ export default function AnswerButton(props) {
     return(
         
         <div className="rectangle" onClick={props.chooseAns}>
-            {props.value.val}
+            {props.value}
         </div>          
     
     )
