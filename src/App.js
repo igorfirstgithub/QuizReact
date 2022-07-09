@@ -32,11 +32,11 @@ export default function App() {
     }, [checkAnswers])
     
     React.useEffect(() => {
-        fetch("https://opentdb.com/api.php?amount=3&category=19&difficulty=easy&type=multiple").
-        then(res => res.json()).
-        then(res => setQuizData(res.results.
+        fetch("https://opentdb.com/api.php?amount=3&category=19&difficulty=easy&type=multiple")
+        .then(res => res.json())
+        .then(res => setQuizData(res.results
         
-        map(question => {
+        .map(question => {
         return {
             question: question.question,
             answers: getAnswerArray(question)
@@ -46,11 +46,11 @@ export default function App() {
     }, [])
     
     React.useEffect(() => {
-        fetch("https://opentdb.com/api.php?amount=3&category=19&difficulty=easy&type=multiple").
-        then(res => res.json()).
-        then(res => setQuizData(res.results.
+        fetch("https://opentdb.com/api.php?amount=3&category=19&difficulty=easy&type=multiple")
+        .then(res => res.json())
+        .then(res => setQuizData(res.results
         
-        map(question => {
+        .map(question => {
         return {
             question: question.question,
             answers: getAnswerArray(question)
@@ -197,7 +197,7 @@ export default function App() {
         return (
             <div>
                 <h1>Quizzical</h1>
-                <p>Welcome to our Math Quiz</p>
+                <p>Welcome to our Math Quiz ver 5</p>
                 <button type="button" onClick={changePage}>Start quiz</button>
             </div>
             )
