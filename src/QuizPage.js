@@ -14,16 +14,20 @@ export default function QuizPage(props) {
     //console.log(props.value)  ;
       
     // Answer onClick Function - set "chosen" to true   
-    function chooseAns(index) {
-       console.log(index) 
+    function chooseAns(ansIndex) {
+       //console.log(ansIndex) 
+       props.chooseQuest(ansIndex, props.questIndex)
     }
     
     // Form an array of answer buttons
     const arrButtons = props.value.answers.map((el, index) => <AnswerButton 
     //Here every el is an object with answer {ans, corr, chosen}
         key={index} 
-        value={el.answer} 
-        chooseAns={() => chooseAns(index)}  
+
+        value={el} 
+        chooseAns={() => chooseAns(index)} 
+        modeCheck={props.modeCheck} 
+
     
     />)
     

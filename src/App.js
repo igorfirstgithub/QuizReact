@@ -24,6 +24,40 @@ export default function App() {
     
     //An array with questions and answers is our central element in state
     const [quizData, setQuizData] = React.useState(initialState);
+    
+    const [checkAnswers, setCheckAnswers] = React.useState(false);
+    
+    React.useEffect(() => {
+        
+    }, [checkAnswers])
+    
+    React.useEffect(() => {
+        fetch("https://opentdb.com/api.php?amount=3&category=19&difficulty=easy&type=multiple").
+        then(res => res.json()).
+        then(res => setQuizData(res.results.
+        
+        map(question => {
+        return {
+            question: question.question,
+            answers: getAnswerArray(question)
+        }
+        
+            })))
+    }, [])
+    
+    React.useEffect(() => {
+        fetch("https://opentdb.com/api.php?amount=3&category=19&difficulty=easy&type=multiple").
+        then(res => res.json()).
+        then(res => setQuizData(res.results.
+        
+        map(question => {
+        return {
+            question: question.question,
+            answers: getAnswerArray(question)
+        }
+        
+            })))
+    }, [selectPage])
    
    
         
@@ -58,9 +92,8 @@ export default function App() {
         
         return ansObjects;
     }
-
-
-function chooseQuest(ansIndex, questIndex) {
+    
+    function chooseQuest(ansIndex, questIndex) {
         //console.log("ans=", ansIndex, " quest=", questIndex);
         setQuizData(oldQuizData => oldQuizData.map((quest, indexQ) => {
             if (indexQ === questIndex) {
@@ -68,7 +101,7 @@ function chooseQuest(ansIndex, questIndex) {
                     if (indexA === ansIndex) {
                         return {...answer, chosen: !answer.chosen}
                     } else {
-                        return answer
+                        return {...answer, chosen: false}
                     }
                 })}
             } else {
@@ -76,14 +109,20 @@ function chooseQuest(ansIndex, questIndex) {
             }
         }))
         
-        console.log(quizData);
+        //console.log(quizData);
     }
-    
-    
     //------------------------------- Creating main structure ----------------------
     
     
-    const quizArray = quizData.map( (quest, index) => <QuizPage key={index} value={quest}  /> )
+    const quizArray = quizData.map( (quest, index) => <QuizPage 
+    
+            key={index} 
+            value={quest}
+            questIndex={index}  
+            chooseQuest={chooseQuest}
+            modeCheck={checkAnswers}
+    
+    /> )
     
     
     
@@ -97,13 +136,31 @@ function chooseQuest(ansIndex, questIndex) {
         
        setSelectPage(prevPage => !prevPage); // Toggle page bit
        
-       setQuizData(oldQuizData => oldQuizData.map(question => {
+       // Get the quiz data from API
+     /*   fetch("https://opentdb.com/api.php?amount=3&category=19&difficulty=easy&type=multiple").
+        then(res => res.json()).
+        then(res => setQuizData(res.results.
+        
+        map(question => {
         return {
             question: question.question,
             answers: getAnswerArray(question)
         }
         
-    }));
+            })))
+    
+        */
+        
+      /*  setQuizData(oldQuizData => oldQuizData.map(question => {
+        return {
+            question: question.question,
+            answers: getAnswerArray(question)
+        }
+        
+    }))
+    
+    */
+       
         
         // Get the quiz data from API
        // fetch("https://opentdb.com/api.php?amount=3&category=19&difficulty=easy&type=multiple").
@@ -117,6 +174,21 @@ function chooseQuest(ansIndex, questIndex) {
         
         // res.results - an array of object, each object is a set of data concerning a question
         // there is much information, among which is info of interest: question, correct answer, incorrect answers
+    }
+    
+    
+    function checkingAnswers() {
+        setCheckAnswers(true);
+    }
+    
+    function startNewGame() {
+        setSelectPage(oldState => !oldState);
+        setCheckAnswers(false);
+    }
+    
+    function numCorrAnswers() {
+        return quizData.filter(quest =>
+         quest.answers.filter(answer => answer.chosen && answer.correct).length > 0).length;
     }
    
    //--------------------------------- Return Block -------------------------------------- 
@@ -135,7 +207,10 @@ function chooseQuest(ansIndex, questIndex) {
         return (
             <div>
                 {quizArray}
-                <button type="button">Submit answers</button>
+                <button type="button" onClick={checkAnswers ? startNewGame : checkingAnswers }>
+                    {checkAnswers ? "Start new quiz" : "Submit answers"}
+                </button>
+                {checkAnswers && <h3>You have got {numCorrAnswers()}/{quizData.length}</h3>}
             </div>
         )
     }
