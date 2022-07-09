@@ -23,9 +23,11 @@ export default function QuizPage(props) {
     const arrButtons = props.value.answers.map((el, index) => <AnswerButton 
     //Here every el is an object with answer {ans, corr, chosen}
         key={index} 
+
         value={el} 
         chooseAns={() => chooseAns(index)} 
         modeCheck={props.modeCheck} 
+
     
     />)
     

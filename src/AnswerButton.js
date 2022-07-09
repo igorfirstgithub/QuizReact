@@ -16,10 +16,12 @@ export default function AnswerButton(props) {
     
     return(
         
+
         <div className={determineColor()} onClick={props.chooseAns}>
             
                      {props.value.answer}
             
+
         </div>          
     
     )
